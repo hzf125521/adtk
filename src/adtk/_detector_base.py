@@ -12,16 +12,17 @@ from .metrics import f1_score, iou, precision, recall
 
 
 class _NonTrainableUnivariateDetector(_NonTrainableUnivariateModel):
-    def predict(
-        self, ts: Union[pd.Series, pd.DataFrame], return_list: bool = False
-    ) -> Union[
-        pd.Series,
-        pd.DataFrame,
-        List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]],
-        Dict[
-            str, List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]]
-        ],
-    ]:
+    def predict(self, ts: Union[pd.Series, pd.DataFrame], return_list: bool = False) \
+            -> Union[
+                pd.Series,
+                pd.DataFrame,
+                List[
+                    Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]
+                ],
+                Dict[
+                    str, List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]]
+                ],
+            ]:
         """Detect anomalies from given time series.
 
         Parameters
@@ -59,19 +60,19 @@ class _NonTrainableUnivariateDetector(_NonTrainableUnivariateModel):
     detect = predict
 
     def score(
-        self,
-        ts: Union[pd.Series, pd.DataFrame],
-        anomaly_true: Union[
-            pd.Series,
-            pd.DataFrame,
-            List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]],
-            Dict[
-                str,
+            self,
+            ts: Union[pd.Series, pd.DataFrame],
+            anomaly_true: Union[
+                pd.Series,
+                pd.DataFrame,
                 List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]],
+                Dict[
+                    str,
+                    List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]],
+                ],
             ],
-        ],
-        scoring: str = "recall",
-        **kwargs: Any
+            scoring: str = "recall",
+            **kwargs: Any
     ) -> Union[float, Dict[str, float]]:
         """Detect anomalies and score the results against true anomalies.
 
@@ -151,16 +152,15 @@ class _TrainableUnivariateDetector(_TrainableUnivariateModel):
         """
         self._fit(ts)
 
-    def predict(
-        self, ts: Union[pd.Series, pd.DataFrame], return_list: bool = False
-    ) -> Union[
-        pd.Series,
-        pd.DataFrame,
-        List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]],
-        Dict[
-            str, List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]]
-        ],
-    ]:
+    def predict(self, ts: Union[pd.Series, pd.DataFrame], return_list: bool = False) \
+            -> Union[
+                pd.Series,
+                pd.DataFrame,
+                List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]],
+                Dict[
+                    str, List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]]
+                ],
+            ]:
         """Detect anomalies from given time series.
 
         Parameters
@@ -202,16 +202,15 @@ class _TrainableUnivariateDetector(_TrainableUnivariateModel):
         else:
             return detected
 
-    def fit_predict(
-        self, ts: Union[pd.Series, pd.DataFrame], return_list: bool = False
-    ) -> Union[
-        pd.Series,
-        pd.DataFrame,
-        List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]],
-        Dict[
-            str, List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]]
-        ],
-    ]:
+    def fit_predict(self, ts: Union[pd.Series, pd.DataFrame], return_list: bool = False) \
+            -> Union[
+                pd.Series,
+                pd.DataFrame,
+                List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]],
+                Dict[
+                    str, List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]]
+                ],
+            ]:
         """Train the detector and detect anomalies from the time series used
         for training.
 
@@ -251,20 +250,21 @@ class _TrainableUnivariateDetector(_TrainableUnivariateModel):
     fit_detect = fit_predict
 
     def score(
-        self,
-        ts: Union[pd.Series, pd.DataFrame],
-        anomaly_true: Union[
-            pd.Series,
-            pd.DataFrame,
-            List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]],
-            Dict[
-                str,
+            self,
+            ts: Union[pd.Series, pd.DataFrame],
+            anomaly_true: Union[
+                pd.Series,
+                pd.DataFrame,
                 List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]],
+                Dict[
+                    str,
+                    List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]],
+                ],
             ],
-        ],
-        scoring: str = "recall",
-        **kwargs: Any
-    ) -> Union[float, Dict[str, float]]:
+            scoring: str = "recall",
+            **kwargs: Any
+    ) \
+            -> Union[float, Dict[str, float]]:
         """Detect anomalies and score the results against true anomalies.
 
         Parameters
@@ -449,7 +449,7 @@ class _TrainableMultivariateDetector(_TrainableMultivariateModel):
         self._fit(df)
 
     def predict(
-        self, df: pd.DataFrame, return_list: bool = False
+            self, df: pd.DataFrame, return_list: bool = False
     ) -> Union[
         pd.Series, List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]]
     ]:
@@ -482,7 +482,7 @@ class _TrainableMultivariateDetector(_TrainableMultivariateModel):
             return detected
 
     def fit_predict(
-        self, df: pd.DataFrame, return_list: bool = False
+            self, df: pd.DataFrame, return_list: bool = False
     ) -> Union[
         pd.Series, List[Union[Tuple[pd.Timestamp, pd.Timestamp], pd.Timestamp]]
     ]:
@@ -516,11 +516,11 @@ class _TrainableMultivariateDetector(_TrainableMultivariateModel):
     fit_detect = fit_predict
 
     def score(
-        self,
-        df: pd.DataFrame,
-        anomaly_true: Union[pd.Series, List, Tuple],
-        scoring: str = "recall",
-        **kwargs: Any
+            self,
+            df: pd.DataFrame,
+            anomaly_true: Union[pd.Series, List, Tuple],
+            scoring: str = "recall",
+            **kwargs: Any
     ) -> float:
         """Detect anomalies and score the results against true anomalies.
 

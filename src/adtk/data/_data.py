@@ -350,6 +350,7 @@ def to_labels(
     freq_as_period: bool = True,
 ) -> Union[pd.Series, pd.DataFrame]:
     """Convert event list to binary series along a time index.
+    （判定目标时刻 是否命中 给定时刻, 命中则为true，否则为false）
 
     Parameters
     ----------
@@ -377,6 +378,8 @@ def to_labels(
         time point represents the instantaneous time instance of 00:00:00 on
         that day, and that time point will be marked positive if an event in
         the event list covers it.
+        （if true, 判定范围是给定时刻全天的24h
+         if false， 判定范围是给定时刻当天的00:00:00）
 
         Default: True.
 

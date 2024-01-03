@@ -68,6 +68,7 @@ def recall(
 
     Recall, a.k.a. sensitivity, hit rate, or true positive rate (TPR), is the
     percentage of true anomalies that are detected successfully.
+    （recall，真阳性率，真实异常/预测的异常）
 
     When the input is anomaly labels, metric calculation treats every time
     point with positive label as an independent event. An anomalous time point
@@ -83,7 +84,7 @@ def recall(
     Parameters
     ----------
     y_true: pandas Series or DataFrame, list, or dict
-        Labels or lists of true anomalies.
+        Labels or lists of true anomalies.（真实异常）
 
         - If pandas Series, it is treated as binary labels along time index.
         - If pandas DataFrame, each column is a binary series and is treated as
@@ -95,7 +96,7 @@ def recall(
           independent type of anomaly.
 
     y_pred: pandas Series or DataFrame, list, or dict
-        Labels or lists of predicted anomalies.
+        Labels or lists of predicted anomalies.（预测的异常）
 
         - If pandas Series, it is treated as binary labels along time index.
         - If pandas DataFrame, each column is a binary series and is treated as
@@ -251,6 +252,7 @@ def precision(
 
     Precision, a.k.a. positive predictive value (PPV), is the percentage of
     predicted anomalies that are true anomalies.
+    （）
 
     When the input is anomaly labels, metric calculation treats every time
     point with positive label as an independent event. An anomalous time point
@@ -266,7 +268,7 @@ def precision(
     Parameters
     ----------
     y_true: pandas Series or DataFrame, list, or dict
-        Labels or lists of true anomalies.
+        Labels or lists of true anomalies.（真实异常）
 
         - If pandas Series, it is treated as binary labels along time index.
         - If pandas DataFrame, each column is a binary series and is treated as
@@ -278,7 +280,7 @@ def precision(
           independent type of anomaly.
 
     y_pred: pandas Series or DataFrame, list, or dict
-        Labels or lists of predicted anomalies.
+        Labels or lists of predicted anomalies.（预测的异常）
 
         - If pandas Series, it is treated as binary labels along time index.
         - If pandas DataFrame, each column is a binary series and is treated as

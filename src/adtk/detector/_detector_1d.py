@@ -123,9 +123,8 @@ class ThresholdAD(_NonTrainableUnivariateDetector):
 
     """
 
-    def __init__(
-        self, low: Optional[float] = None, high: Optional[float] = None
-    ) -> None:
+    def __init__(self, low: Optional[float] = None, high: Optional[float] = None) \
+            -> None:
         super().__init__()
         self.low = low
         self.high = high
@@ -134,10 +133,10 @@ class ThresholdAD(_NonTrainableUnivariateDetector):
     def _param_names(self) -> Tuple[str, ...]:
         return ("low", "high")
 
-    def _predict_core(self, s: pd.Series) -> pd.Series:
-        predicted = (
-            s > (self.high if (self.high is not None) else float("inf"))
-        ) | (s < (self.low if (self.low is not None) else -float("inf")))
+    def _predict_core(self, s: pd.Series) \
+            -> pd.Series:
+        predicted = (s > (self.high if (self.high is not None) else float("inf"))) | \
+                    (s < (self.low if (self.low is not None) else -float("inf")))
         predicted[s.isna()] = np.nan
         return predicted
 
@@ -169,9 +168,8 @@ class QuantileAD(_TrainableUnivariateDetector):
 
     """
 
-    def __init__(
-        self, low: Optional[float] = None, high: Optional[float] = None
-    ) -> None:
+    def __init__(self, low: Optional[float] = None, high: Optional[float] = None) \
+            -> None:
         super().__init__()
         self.low = low
         self.high = high
@@ -192,7 +190,8 @@ class QuantileAD(_TrainableUnivariateDetector):
         else:
             self.abs_low_ = s.quantile(self.low)
 
-    def _predict_core(self, s: pd.Series) -> pd.Series:
+    def _predict_core(self, s: pd.Series) \
+            -> pd.Series:
         predicted = (s > self.abs_high_) | (s < self.abs_low_)
         predicted[s.isna()] = np.nan
         return predicted
