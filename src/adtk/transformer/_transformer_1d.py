@@ -344,6 +344,34 @@ class RollingAggregate(_NonTrainableUnivariateTransformer):
         return s_rolling
 
 
+
+# 简化的RollingAggregate类
+# class RollingAggregate:
+#     def __init__(self, window: Union[int, str], agg: Union[str, Callable[[pd.Series], Union[float, np.ndarray]]] = 'mean',
+#                  agg_params: Optional[Dict[str, Any]] = None, center: bool = False, min_periods: Optional[int] = None) -> None:
+#         self.window = window
+#         self.agg = agg
+#         self.agg_params = agg_params
+#         self.center = center
+#         self.min_periods = min_periods
+#
+#     def transform(self, s: pd.Series) -> Union[pd.Series, pd.DataFrame]:
+#         if not (s.index.is_monotonic_increasing or s.index.is_monotonic_decreasing):
+#             raise ValueError("Time series must have a monotonic time index.")
+#
+#         rolling = s.rolling(window=self.window, center=self.center, min_periods=self.min_periods)
+#
+#         if callable(self.agg):
+#             result = rolling.apply(self.agg)
+#         else:
+#             result = getattr(rolling, self.agg)()
+#
+#         return result
+
+
+
+
+
 class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
     """Transformer that rolls two sliding windows side-by-side along a time
     series, aggregates using a user-given operation, and calcuates the
@@ -441,8 +469,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
         self,
         window: Union[int, str, Tuple[Union[int, str], Union[int, str]]],
         agg: Union[
-            str,
-            Callable[[pd.Series], Union[float, np.ndarray]],
+            str, Callable[[pd.Series], Union[float, np.ndarray]],
             Tuple[
                 Union[str, Callable[[pd.Series], Union[float, np.ndarray]]],
                 Union[str, Callable[[pd.Series], Union[float, np.ndarray]]],
@@ -626,6 +653,12 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
             return s_rolling
 
         raise ValueError("Invalid value of diff")
+
+
+
+# 简化DoubleRollingAggregate
+
+
 
 
 class ClassicSeasonalDecomposition(_TrainableUnivariateTransformer):

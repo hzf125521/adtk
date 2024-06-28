@@ -252,6 +252,7 @@ class InterQuartileRangeAD(_TrainableUnivariateDetector):
                 (self.c if (not isinstance(self.c, tuple)) else self.c[0])
                 is not None
             )
+
             else -float("inf")
         )
         self.abs_high_ = (
