@@ -232,6 +232,7 @@ class RollingAggregate(_NonTrainableUnivariateTransformer):
             closed=closed,
         )  # type: Union[pd.Series, pd.DataFrame]
 
+        # 用于pd.rolling()自带agg之外的一些agg计算中
         def getRollingVector(
             rolling: Union[pd.Series, pd.DataFrame],
             aggFunc: Any,
@@ -252,6 +253,7 @@ class RollingAggregate(_NonTrainableUnivariateTransformer):
             s_rolling.columns = output_names
             return s_rolling
 
+        # 采取那种agg方式，有pd中rolling自带的agg，也有自定的一些agg，合计在aggList
         aggList = [
             "mean",
             "median",
@@ -270,6 +272,7 @@ class RollingAggregate(_NonTrainableUnivariateTransformer):
             "kurt",
             "hist",
         ]
+        # pd.rolling()自带的agg
         if agg in [
             "mean",
             "median",
@@ -283,6 +286,7 @@ class RollingAggregate(_NonTrainableUnivariateTransformer):
             "kurt",
         ]:
             s_rolling = rolling.agg(agg)
+        # 自定的一些agg
         elif agg == "nunique":
             s_rolling = rolling.agg(lambda x: len(np.unique(x.dropna())))
         elif agg == "nnz":
@@ -531,7 +535,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
             if isinstance(window[0], int):
                 s_rolling_left = RollingAggregate(
                     agg=agg[0],
-                    agg_params=agg_params[0],
+                    agg_params=agg_params[0],   # 只在自定agg中才使用
                     window=window[0],
                     min_periods=min_periods[0],
                     center=False,
