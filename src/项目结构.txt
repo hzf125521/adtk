@@ -1,0 +1,16 @@
+-adtk
+    -aggregator
+        -_aggregator.py
+    -data
+        -_data.py
+    -detector
+        -_detector_1d.py
+    -pipe
+        -_pipe.py
+    -transformer
+        -_transformer_1d.py
+    -_aggregator_base.py
+    -_base.py
+    -_detector_base.py
+    -_transformer_base.py
+    -_utils.py

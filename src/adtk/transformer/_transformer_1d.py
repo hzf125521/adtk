@@ -531,7 +531,9 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
         if not isinstance(min_periods, tuple):
             min_periods = (min_periods, min_periods)
 
+        # center = True
         if center:
+            # left
             if isinstance(window[0], int):
                 s_rolling_left = RollingAggregate(
                     agg=agg[0],
@@ -540,6 +542,8 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                     min_periods=min_periods[0],
                     center=False,
                 ).transform(s.shift(1))
+                print(s.shift(1))
+                print("s_rolling_left", "\n", s_rolling_left)
             else:
                 ra = RollingAggregate(
                     agg=agg[0],
@@ -552,7 +556,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                     raise PandasBugError()
                 ra._closed = "left"  # _closed为RollingAggregate的一个属性，默认为None
                 s_rolling_left = ra.transform(s)
-
+            # right
             if isinstance(window[1], int):
                 s_rolling_right = (
                     RollingAggregate(
@@ -565,6 +569,8 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                     .transform(s.iloc[::-1])
                     .iloc[::-1]
                 )
+                print(s.iloc[::-1])
+                print("s_rolling_right", "\n", s_rolling_right)
             else:
                 s_reversed = pd.Series(
                     s.values[::-1],
@@ -589,7 +595,10 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                     index=s.index,
                 )
                 s_rolling_right.name = s.name
+
+        # center = False
         else:
+            # left
             if isinstance(window[1], int):  # if window is int
                 s_rolling_left = RollingAggregate(
                     agg=agg[0],
@@ -621,7 +630,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                     s_rolling_left = s_rolling_left[s.index]
                 else:
                     s_rolling_left = s_rolling_left.loc[s.index, :]
-
+            # right
             s_rolling_right = RollingAggregate(
                 agg=agg[1],
                 agg_params=agg_params[1],
