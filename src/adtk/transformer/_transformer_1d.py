@@ -550,8 +550,9 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                 )
                 if parse(pd.__version__) < parse("0.25"):
                     raise PandasBugError()
-                ra._closed = "left"
+                ra._closed = "left"  # _closed为RollingAggregate的一个属性，默认为None
                 s_rolling_left = ra.transform(s)
+
             if isinstance(window[1], int):
                 s_rolling_right = (
                     RollingAggregate(
@@ -589,7 +590,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                 )
                 s_rolling_right.name = s.name
         else:
-            if isinstance(window[1], int):
+            if isinstance(window[1], int):  # if window is int
                 s_rolling_left = RollingAggregate(
                     agg=agg[0],
                     agg_params=agg_params[0],
@@ -597,7 +598,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                     min_periods=min_periods[0],
                     center=False,
                 ).transform(s.shift(window[1]))
-            else:
+            else:  # if window is str, it must be able to be converted into a pandas Timedelta object
                 s_shifted = pd.Series(
                     s.values, s.index + pd.Timedelta(window[1])
                 )
@@ -620,6 +621,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                     s_rolling_left = s_rolling_left[s.index]
                 else:
                     s_rolling_left = s_rolling_left.loc[s.index, :]
+
             s_rolling_right = RollingAggregate(
                 agg=agg[1],
                 agg_params=agg_params[1],
@@ -628,6 +630,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                 center=False,
             ).transform(s)
 
+        # for pd.Series
         if isinstance(s_rolling_left, pd.Series):
             if diff in ["l1", "l2"]:
                 return abs(s_rolling_right - s_rolling_left)
@@ -638,6 +641,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
             if diff == "abs_rel_diff":
                 return abs(s_rolling_right - s_rolling_left) / s_rolling_left
 
+        # for pd.DataFrame
         if isinstance(s_rolling_left, pd.DataFrame):
             if diff == "l1":
                 return abs(s_rolling_right - s_rolling_left).sum(
