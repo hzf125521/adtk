@@ -529,7 +529,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
 
         # center = True
         if center:
-            print("center", center)
+            # print("center", center)
             # left
             if isinstance(window[0], int):
                 s_rolling_left = RollingAggregate(
@@ -541,9 +541,9 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                 ).transform(s.shift(1))  # 所有元素整体往后退一个位置（就是为了实现pd.rolling的closed='left'）
                 # print(s.shift(1))
                 # print()
-                print("s_rolling_left", "\n", s_rolling_left)
+                # print("s_rolling_left", "\n", s_rolling_left)
             else:
-                print("left else !!!!!!!!!!!!!!!!!!!!!!!!!")
+                # print("left else !!!!!!!!!!!!!!!!!!!!!!!!!")
                 ra = RollingAggregate(
                     agg=agg[0],
                     agg_params=agg_params[0],
@@ -632,10 +632,10 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                 #     )
                 # )
 
-                print("s_rolling_right", "\n", s_rolling_right)
+                # print("s_rolling_right", "\n", s_rolling_right)
             else:
-                print(""
-                      "right else !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                # print(""
+                #       "right else !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 s_reversed = pd.Series(
                     s.values[::-1],
                     index=pd.DatetimeIndex(
@@ -662,7 +662,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
 
         # center = False
         else:
-            print("center", center)
+            # print("center", center)
             # left
             if isinstance(window[1], int):  # if window is int
                 s_rolling_left = RollingAggregate(
@@ -707,7 +707,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
         # for pd.Series
         if isinstance(s_rolling_left, pd.Series):
             if diff in ["l1", "l2"]:
-                print("l1", "\n", abs(s_rolling_right - s_rolling_left))
+                # print("l1", "\n", abs(s_rolling_right - s_rolling_left))
                 return abs(s_rolling_right - s_rolling_left)
             if diff == "diff":
                 return s_rolling_right - s_rolling_left
