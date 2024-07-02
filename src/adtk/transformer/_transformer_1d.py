@@ -53,11 +53,11 @@ class CustomizedTransformer1D(_TrainableUnivariateTransformer):
     """
 
     def __init__(
-        self,
-        transform_func: Callable,
-        transform_func_params: Optional[Dict[str, Any]] = None,
-        fit_func: Optional[Callable] = None,
-        fit_func_params: Optional[Dict[str, Any]] = None,
+            self,
+            transform_func: Callable,
+            transform_func_params: Optional[Dict[str, Any]] = None,
+            fit_func: Optional[Callable] = None,
+            fit_func_params: Optional[Dict[str, Any]] = None,
     ) -> None:
         self._fitted_transform_func_params = {}  # type: Dict
         super().__init__()
@@ -191,14 +191,14 @@ class RollingAggregate(_NonTrainableUnivariateTransformer):
     """
 
     def __init__(
-        self,
-        window: Union[int, str],
-        agg: Union[
-            str, Callable[[pd.Series], Union[float, np.ndarray]]
-        ] = "mean",
-        agg_params: Optional[Dict[str, Any]] = None,
-        center: bool = False,
-        min_periods: Optional[int] = None,
+            self,
+            window: Union[int, str],
+            agg: Union[
+                str, Callable[[pd.Series], Union[float, np.ndarray]]
+            ] = "mean",
+            agg_params: Optional[Dict[str, Any]] = None,
+            center: bool = False,
+            min_periods: Optional[int] = None,
     ) -> None:
         super().__init__()
         self.agg = agg
@@ -214,7 +214,7 @@ class RollingAggregate(_NonTrainableUnivariateTransformer):
 
     def _predict_core(self, s: pd.Series) -> Union[pd.Series, pd.DataFrame]:
         if not (
-            s.index.is_monotonic_increasing or s.index.is_monotonic_decreasing
+                s.index.is_monotonic_increasing or s.index.is_monotonic_decreasing
         ):
             raise ValueError("Time series must have a monotonic time index. ")
 
@@ -234,9 +234,9 @@ class RollingAggregate(_NonTrainableUnivariateTransformer):
 
         # 用于pd.rolling()自带agg之外的一些agg计算中
         def getRollingVector(
-            rolling: Union[pd.Series, pd.DataFrame],
-            aggFunc: Any,
-            output_names: List[str],
+                rolling: Union[pd.Series, pd.DataFrame],
+                aggFunc: Any,
+                output_names: List[str],
         ) -> Union[pd.Series, pd.DataFrame]:
             # we use this function to trick pandas to get vector rolling agg
             s_rolling_raw = []  # type: Union[List, np.array]
@@ -348,7 +348,6 @@ class RollingAggregate(_NonTrainableUnivariateTransformer):
         return s_rolling
 
 
-
 # 简化的RollingAggregate类
 # class RollingAggregate:
 #     def __init__(self, window: Union[int, str], agg: Union[str, Callable[[pd.Series], Union[float, np.ndarray]]] = 'mean',
@@ -371,9 +370,6 @@ class RollingAggregate(_NonTrainableUnivariateTransformer):
 #             result = getattr(rolling, self.agg)()
 #
 #         return result
-
-
-
 
 
 class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
@@ -470,29 +466,29 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
     """
 
     def __init__(
-        self,
-        window: Union[int, str, Tuple[Union[int, str], Union[int, str]]],
-        agg: Union[
-            str, Callable[[pd.Series], Union[float, np.ndarray]],
-            Tuple[
-                Union[str, Callable[[pd.Series], Union[float, np.ndarray]]],
-                Union[str, Callable[[pd.Series], Union[float, np.ndarray]]],
-            ],
-        ] = "mean",
-        agg_params: Union[
-            Optional[Dict[str, Any]],
-            Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]],
-        ] = None,
-        center: bool = True,
-        min_periods: Union[
-            Optional[int], Tuple[Optional[int], Optional[int]]
-        ] = None,
-        diff: Union[
-            str,
-            Callable[
-                [Union[float, np.ndarray], Union[float, np.ndarray]], float
-            ],
-        ] = "l1",
+            self,
+            window: Union[int, str, Tuple[Union[int, str], Union[int, str]]],
+            agg: Union[
+                str, Callable[[pd.Series], Union[float, np.ndarray]],
+                Tuple[
+                    Union[str, Callable[[pd.Series], Union[float, np.ndarray]]],
+                    Union[str, Callable[[pd.Series], Union[float, np.ndarray]]],
+                ],
+            ] = "mean",
+            agg_params: Union[
+                Optional[Dict[str, Any]],
+                Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]],
+            ] = None,
+            center: bool = True,
+            min_periods: Union[
+                Optional[int], Tuple[Optional[int], Optional[int]]
+            ] = None,
+            diff: Union[
+                str,
+                Callable[
+                    [Union[float, np.ndarray], Union[float, np.ndarray]], float
+                ],
+            ] = "l1",
     ) -> None:
         super().__init__()
         self.agg = agg
@@ -508,7 +504,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
 
     def _predict_core(self, s: pd.Series) -> pd.Series:
         if not (
-            s.index.is_monotonic_increasing or s.index.is_monotonic_decreasing
+                s.index.is_monotonic_increasing or s.index.is_monotonic_decreasing
         ):
             raise ValueError("Time series must have a monotonic time index. ")
 
@@ -533,18 +529,21 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
 
         # center = True
         if center:
+            print("center", center)
             # left
             if isinstance(window[0], int):
                 s_rolling_left = RollingAggregate(
                     agg=agg[0],
-                    agg_params=agg_params[0],   # 只在自定agg中才使用
+                    agg_params=agg_params[0],  # 只在自定agg中才使用
                     window=window[0],
                     min_periods=min_periods[0],
                     center=False,
-                ).transform(s.shift(1))
-                print(s.shift(1))
+                ).transform(s.shift(1))  # 所有元素整体往后退一个位置（就是为了实现pd.rolling的closed='left'）
+                # print(s.shift(1))
+                # print()
                 print("s_rolling_left", "\n", s_rolling_left)
             else:
+                print("left else !!!!!!!!!!!!!!!!!!!!!!!!!")
                 ra = RollingAggregate(
                     agg=agg[0],
                     agg_params=agg_params[0],
@@ -569,9 +568,74 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                     .transform(s.iloc[::-1])
                     .iloc[::-1]
                 )
-                print(s.iloc[::-1])
+                # print(s.iloc[::-1])  # 位置索引和元素全部倒序
+                # print(
+                #     RollingAggregate(
+                #         agg=agg[1],
+                #         agg_params=agg_params[1],
+                #         window=window[1],
+                #         min_periods=min_periods[1],
+                #         center=False,
+                #     ).window,
+                #     RollingAggregate(
+                #         agg=agg[1],
+                #         agg_params=agg_params[1],
+                #         window=window[1],
+                #         min_periods=min_periods[1],
+                #         center=False,
+                #     ).agg
+                # )
+                # print(
+                #     RollingAggregate(
+                #         agg=agg[1],
+                #         agg_params=agg_params[1],
+                #         window=window[1],
+                #         min_periods=min_periods[1],
+                #         center=False,
+                #     )
+                #     .transform(s.iloc[::-1])
+                # )
+                # print(
+                #     (
+                #         RollingAggregate(
+                #             agg=agg[1],
+                #             agg_params=agg_params[1],
+                #             window=window[1],
+                #             min_periods=min_periods[1],
+                #             center=False,
+                #         )
+                #         .transform(s.iloc[::-1])
+                #     )
+                # )
+                # print(
+                #     RollingAggregate(
+                #         agg=agg[1],
+                #         agg_params=agg_params[1],
+                #         window=window[1],
+                #         min_periods=min_periods[1],
+                #         center=False,
+                #     )
+                #     .transform(s.iloc[::-1])
+                #     .iloc[::-1]
+                # )
+                # print(
+                #     (
+                #         RollingAggregate(
+                #             agg=agg[1],
+                #             agg_params=agg_params[1],
+                #             window=window[1],
+                #             min_periods=min_periods[1],
+                #             center=False,
+                #         )
+                #         .transform(s.iloc[::-1])
+                #         .iloc[::-1]
+                #     )
+                # )
+
                 print("s_rolling_right", "\n", s_rolling_right)
             else:
+                print(""
+                      "right else !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 s_reversed = pd.Series(
                     s.values[::-1],
                     index=pd.DatetimeIndex(
@@ -598,6 +662,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
 
         # center = False
         else:
+            print("center", center)
             # left
             if isinstance(window[1], int):  # if window is int
                 s_rolling_left = RollingAggregate(
@@ -616,7 +681,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
                 )
                 s_shifted = s_shifted.iloc[
                     s_shifted.index.duplicated() == False
-                ]
+                    ]
                 s_shifted = s_shifted.sort_index()
                 s_shifted.name = s.name
                 s_rolling_left = RollingAggregate(
@@ -642,6 +707,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
         # for pd.Series
         if isinstance(s_rolling_left, pd.Series):
             if diff in ["l1", "l2"]:
+                print("l1", "\n", abs(s_rolling_right - s_rolling_left))
                 return abs(s_rolling_right - s_rolling_left)
             if diff == "diff":
                 return s_rolling_right - s_rolling_left
@@ -672,10 +738,7 @@ class DoubleRollingAggregate(_NonTrainableUnivariateTransformer):
         raise ValueError("Invalid value of diff")
 
 
-
 # 简化DoubleRollingAggregate
-
-
 
 
 class ClassicSeasonalDecomposition(_TrainableUnivariateTransformer):
@@ -719,7 +782,7 @@ class ClassicSeasonalDecomposition(_TrainableUnivariateTransformer):
     """
 
     def __init__(
-        self, freq: Optional[int] = None, trend: bool = False
+            self, freq: Optional[int] = None, trend: bool = False
     ) -> None:
         super().__init__()
         self.freq = freq
@@ -731,11 +794,11 @@ class ClassicSeasonalDecomposition(_TrainableUnivariateTransformer):
 
     def _fit_core(self, s: pd.Series) -> None:
         if not (
-            s.index.is_monotonic_increasing or s.index.is_monotonic_decreasing
+                s.index.is_monotonic_increasing or s.index.is_monotonic_decreasing
         ):
             raise ValueError("Time series must have a monotonic time index. ")
         # remove starting and ending nans
-        s = s.loc[s.first_valid_index() : s[::-1].first_valid_index()].copy()
+        s = s.loc[s.first_valid_index(): s[::-1].first_valid_index()].copy()
         if pd.isna(s).any():
             raise ValueError(
                 "Found NaN in time series among valid values. "
@@ -773,18 +836,18 @@ class ClassicSeasonalDecomposition(_TrainableUnivariateTransformer):
                 else seasonal_decompose(s, freq=self.freq_)
             )
             self.seasonal_ = getattr(seasonal_decompose_results, "seasonal")[
-                : self.freq_
-            ]
+                             : self.freq_
+                             ]
         else:
             self.seasonal_ = s.iloc[: self.freq_].copy()
             for i in range(len(self.seasonal_)):
                 self.seasonal_.iloc[i] = s.iloc[
-                    i :: len(self.seasonal_)
-                ].mean()
+                                         i:: len(self.seasonal_)
+                                         ].mean()
 
     def _predict_core(self, s: pd.Series) -> pd.Series:
         if not (
-            s.index.is_monotonic_increasing or s.index.is_monotonic_decreasing
+                s.index.is_monotonic_increasing or s.index.is_monotonic_decreasing
         ):
             raise ValueError("Time series must have a monotonic time index. ")
         # check if series freq is same
@@ -875,7 +938,7 @@ class ClassicSeasonalDecomposition(_TrainableUnivariateTransformer):
 
 
 def _identify_seasonal_period(
-    s: pd.Series, low_autocorr: float = 0.1, high_autocorr: float = 0.3
+        s: pd.Series, low_autocorr: float = 0.1, high_autocorr: float = 0.3
 ) -> Optional[int]:
     """Identify seasonal period of a time series based on autocorrelation.
 
@@ -911,13 +974,13 @@ def _identify_seasonal_period(
     cutPos = np.argwhere(autocorr >= low_autocorr)[0][0]
     diff_autocorr = np.diff(autocorr[cutPos:])
     high_autocorr_peak_pos = (
-        cutPos
-        + 1
-        + np.argwhere(
-            (diff_autocorr[:-1] > 0)
-            & (diff_autocorr[1:] < 0)
-            & (autocorr[cutPos + 1 : -1] > high_autocorr)
-        ).flatten()
+            cutPos
+            + 1
+            + np.argwhere(
+        (diff_autocorr[:-1] > 0)
+        & (diff_autocorr[1:] < 0)
+        & (autocorr[cutPos + 1: -1] > high_autocorr)
+    ).flatten()
     )
     if len(high_autocorr_peak_pos) > 0:
         return high_autocorr_peak_pos[
@@ -981,7 +1044,7 @@ class Retrospect(_NonTrainableUnivariateTransformer):
     """
 
     def __init__(
-        self, n_steps: int = 1, step_size: int = 1, till: int = 0
+            self, n_steps: int = 1, step_size: int = 1, till: int = 0
     ) -> None:
         super().__init__()
         self.n_steps = n_steps
@@ -994,7 +1057,7 @@ class Retrospect(_NonTrainableUnivariateTransformer):
 
     def _predict_core(self, s: pd.Series) -> pd.DataFrame:
         if not (
-            s.index.is_monotonic_increasing or s.index.is_monotonic_decreasing
+                s.index.is_monotonic_increasing or s.index.is_monotonic_decreasing
         ):
             raise ValueError("Time series must have a monotonic time index. ")
         if (s.index.freq is None) and (s.index.inferred_freq):

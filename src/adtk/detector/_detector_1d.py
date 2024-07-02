@@ -426,8 +426,8 @@ class PersistAD(_TrainableUnivariateDetector):
                 "diff_abs": {
                     "model": DoubleRollingAggregate(
                         agg=agg,
-                        window=(window, 1),
-                        center=True,
+                        window=(window, 1),  # 左右RollingAggregate使用不同的window
+                        center=True,  # 这个center并不是给RollingAggregate的
                         min_periods=(min_periods, 1),
                         diff="l1",
                     ),
@@ -441,7 +441,7 @@ class PersistAD(_TrainableUnivariateDetector):
                     "model": DoubleRollingAggregate(
                         agg=agg,
                         window=(window, 1),
-                        center=True,
+                        center=True,  # 这个center并不是给RollingAggregate的
                         min_periods=(min_periods, 1),
                         diff="diff",
                     ),
